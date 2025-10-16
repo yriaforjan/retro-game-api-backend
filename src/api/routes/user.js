@@ -1,8 +1,17 @@
-const { register, login } = require("../controllers/user");
+const isAdmin = require("../../middlewares/isAdmin");
+const isAuth = require("../../middlewares/isAuth");
+const {
+  register,
+  login,
+  toggleFavorite,
+  changeRole,
+} = require("../controllers/user");
 
-const UserRouter = require("express").Router();
+const UsersRouter = require("express").Router();
 
-UserRouter.post("/register", register);
-UserRouter.post("/login", login);
+UsersRouter.post("/register", register);
+UsersRouter.post("/login", login);
+UsersRouter.put("/favorites/toggle/:videogameId", isAuth, toggleFavorite);
+UsersRouter.put("/:id/role", isAuth, isAdmin, changeRole); // Este ID es el del usuario a quien quiero cambiar el rol
 
-module.exports = UserRouter;
+module.exports = UsersRouter;

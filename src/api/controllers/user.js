@@ -13,9 +13,13 @@ const register = async (req, res, next) => {
         .json({ error: "Ya existe un usuario registrado con este email" });
     }
     const userDB = await user.save();
+
+    const userResponse = userDB.toObject();
+    delete userResponse.password; // Limpieza de seguridad
+
     return res
       .status(201)
-      .json({ message: "Usuario registrado", user: userDB });
+      .json({ message: "Usuario registrado", user: userResponse });
   } catch (error) {
     res.status(500).json({ error: "Error registrando al usuario" });
   }
@@ -32,8 +36,9 @@ const login = async (req, res, next) => {
 
     if (bcrypt.compareSync(req.body.password, user.password)) {
       const token = generateToken(user._id, user.email);
-      delete user.password; // Limpieza de seguridad
-      return res.status(200).json({ token, user });
+      const userResponse = user.toObject();
+      delete userResponse.password;
+      return res.status(200).json({ token, user: userResponse });
     } else {
       return res
         .status(400)
@@ -90,4 +95,32 @@ const toggleFavorite = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, toggleFavorite };
+const changeRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { role: role },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    const userResponse = updatedUser.toObject();
+    delete userResponse.password; // Limpieza de seguridad
+
+    return res.status(200).json({
+      message: `Rol de usuario ${updatedUser.email} actualizado a ${updatedUser.role}.`,
+      user: userResponse,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Error al cambiar el rol del usuario." });
+  }
+};
+
+module.exports = { register, login, toggleFavorite, changeRole };

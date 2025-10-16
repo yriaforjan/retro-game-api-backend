@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: [8, "Contraseña de 8 caracteres mínimo"],
     },
+    image: { type: String, trim: true },
+    role: { type: String, enum: ["user", "admin"], default: "user" },
     favoriteVideogames: [
       {
         type: mongoose.Types.ObjectId,
@@ -24,7 +26,10 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", function (next) {
-  this.password = bcrypt.hashSync(this.password, 10);
+  // SOLO hasheamos la contraseña si ha sido modificada (registro o cambio de clave), sino tendremos errores de login por DOBLE-HASH!!!!!!
+  if (this.isModified("password")) {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
   next();
 });
 
