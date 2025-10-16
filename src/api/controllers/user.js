@@ -49,6 +49,53 @@ const login = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ error: `No se ha encontrado ningún usuario con el id ${id}` });
+    }
+    const userResponse = deletedUser.toObject();
+    delete userResponse.password;
+    return res
+      .status(200)
+      .json({ message: "Usuario eliminado", user: userResponse });
+  } catch (error) {
+    return res.status(500).json({ error: "Error al eliminar el usuario" });
+  }
+};
+
+const changeRole = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { role: role },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    const userResponse = updatedUser.toObject();
+    delete userResponse.password; // Limpieza de seguridad
+
+    return res.status(200).json({
+      message: `Rol de usuario ${updatedUser.email} actualizado a ${updatedUser.role}.`,
+      user: userResponse,
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "Error al cambiar el rol del usuario." });
+  }
+};
+
 const toggleFavorite = async (req, res, next) => {
   try {
     const { videogameId } = req.params;
@@ -95,32 +142,4 @@ const toggleFavorite = async (req, res, next) => {
   }
 };
 
-const changeRole = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { role } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { role: role },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    const userResponse = updatedUser.toObject();
-    delete userResponse.password; // Limpieza de seguridad
-
-    return res.status(200).json({
-      message: `Rol de usuario ${updatedUser.email} actualizado a ${updatedUser.role}.`,
-      user: userResponse,
-    });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ error: "Error al cambiar el rol del usuario." });
-  }
-};
-
-module.exports = { register, login, toggleFavorite, changeRole };
+module.exports = { register, login, deleteUser, changeRole, toggleFavorite };
