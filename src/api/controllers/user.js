@@ -51,6 +51,39 @@ const login = async (req, res, next) => {
   }
 };
 
+const editUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: `No se ha encontrado ningún usuario con el id ${id}` });
+    }
+    // Si hay un nuevo avatar y el usuario tenía uno anterior:
+    if (req.file && user.avatar) {
+      deleteFile(user.avatar); // borro de cloudinary
+      req.body.avatar = req.file.path; // actualizo url
+    }
+
+    const editedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    const userResponse = editedUser.toObject();
+    delete userResponse.password;
+    return res.status(200).json({
+      message: "Usuario editado con éxito",
+      user: userResponse,
+    });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ error: "Datos de usuario inválidos." });
+    }
+    return res.status(500).json({ error: "Error al editar el usuario" });
+  }
+};
+
 const deleteUser = async (req, res, next) => {
   const { id } = req.params;
   try {
@@ -145,4 +178,44 @@ const toggleFavorite = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, deleteUser, changeRole, toggleFavorite };
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    const usersResponse = users.map(user => {
+      const userResponse = user.toObject();
+      delete userResponse.password;
+      return userResponse;
+    })
+    return res.status(200).json({ users: usersResponse });
+  } catch (error) {
+    return res.status(500).json({ error: "Error al obtener los usuarios" });
+  }
+};
+
+const getUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: `No se ha encontrado ningún usuario con el id ${id}` });
+    }
+    const userResponse = user.toObject();
+    delete userResponse.password;
+    return res.status(200).json({ user: userResponse });
+  } catch (error) {
+    return res.status(500).json({ error: "Error obteniendo el usuario" });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  editUser,
+  deleteUser,
+  changeRole,
+  toggleFavorite,
+  getUsers,
+  getUser
+};
