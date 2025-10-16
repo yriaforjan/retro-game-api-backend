@@ -54,7 +54,7 @@ const editVideogame = async (req, res, next) => {
     }
     return res.status(200).json({
       message: "Videojuego editado con éxito",
-      videogame: editVideogame,
+      videogame: editedVideogame,
     });
   } catch (error) {
     if (error.name === "ValidationError") {

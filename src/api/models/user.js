@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: [8, "Contraseña de 8 caracteres mínimo"],
     },
-    image: { type: String, trim: true },
+    avatar: { type: String, trim: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
     favoriteVideogames: [
       {

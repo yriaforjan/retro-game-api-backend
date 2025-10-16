@@ -2,6 +2,7 @@ const User = require("../models/user");
 const Videogame = require("../models/videogame");
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../../utils/token");
+const deleteFile = require("../../utils/deleteFile");
 
 const register = async (req, res, next) => {
   try {
@@ -12,6 +13,7 @@ const register = async (req, res, next) => {
         .status(400)
         .json({ error: "Ya existe un usuario registrado con este email" });
     }
+    if (req.file) user.avatar = req.file.path;
     const userDB = await user.save();
 
     const userResponse = userDB.toObject();
@@ -58,6 +60,7 @@ const deleteUser = async (req, res, next) => {
         .status(404)
         .json({ error: `No se ha encontrado ningún usuario con el id ${id}` });
     }
+    if (deletedUser.avatar) deleteFile(deletedUser.avatar);
     const userResponse = deletedUser.toObject();
     delete userResponse.password;
     return res
@@ -79,7 +82,7 @@ const changeRole = async (req, res, next) => {
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "Usuario no encontrado." });
+      return res.status(404).json({ error: "Usuario no encontrado." });
     }
 
     const userResponse = updatedUser.toObject();
