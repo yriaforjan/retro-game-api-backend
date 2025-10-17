@@ -9,7 +9,7 @@ const isAuth = async (req, res, next) => {
     const decoded = verifyToken(token);
     const user = await User.findById(decoded.id);
     if (!user) return res.status(401).json({ error: "Usuario no encontrado" });
-    delete user.password; // Limpieza de seguridad
+
     req.user = user;
     next();
   } catch (error) {

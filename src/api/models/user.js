@@ -4,7 +4,13 @@ const bcrypt = require("bcrypt");
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true, unique: true },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+      match: [/.+@.+\..+/, "Email inválido"],
+    },
     password: {
       type: String,
       required: true,
@@ -16,7 +22,7 @@ const userSchema = new mongoose.Schema(
     favoriteVideogames: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "Videogame",
+        ref: "Videogame", // referencia a los videojuegos favoritos
       },
     ],
   },
@@ -26,7 +32,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", function (next) {
-  // SOLO hasheamos la contraseña si ha sido modificada (registro o cambio de clave), sino tendremos errores de login por DOBLE-HASH!!!!!!
+  // SOLO hasheamos la contraseña si ha sido modificada (registro o cambio de clave), sino me dará errores de login por DOBLE-HASH!!!!!!
   if (this.isModified("password")) {
     this.password = bcrypt.hashSync(this.password, 10);
   }

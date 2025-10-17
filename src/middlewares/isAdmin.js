@@ -3,7 +3,7 @@ const isAdmin = (req, res, next) => {
     ? next()
     : res
         .status(403)
-        .json({ error: "Prohibido. Require permisos de administrador" });
+        .json({ error: "Prohibido. Se requieren permisos de administrador" });
 };
 
 module.exports = isAdmin;

@@ -1,5 +1,5 @@
 const isAdminOrOwner = (req, res, next) => {
-  const requestId = req.user.id;
+  const requestId = req.user._id.toString();
   const targetId = req.params.id;
 
   if (req.user.role === "admin" || requestId === targetId) {

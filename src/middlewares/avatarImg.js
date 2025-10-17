@@ -10,6 +10,6 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage });
+const uploadAvatar = multer({ storage });
 
-module.exports = upload;
+module.exports = uploadAvatar;

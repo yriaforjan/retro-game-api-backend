@@ -6,7 +6,7 @@ const deleteFile = (url) => {
   let public_id = `${array.at(-2)}/${name}`;
 
   cloudinary.uploader.destroy(public_id, () => {
-    console.log("Imagen eliminada");
+    console.log("Fichero eliminado");
   });
 };
 
