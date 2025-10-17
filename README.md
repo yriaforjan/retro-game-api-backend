@@ -35,7 +35,6 @@ El proyecto está construido con las siguientes tecnologías clave:
 ### 🔧 Configuración
 
 - **Dotenv:** Para la gestión de variables de entorno (como claves de API y credenciales).
--
 
 ---
 
@@ -93,12 +92,11 @@ JWT_SECRET=tu-secreto-jwt-seguro
 - **CLOUDINARY_API_SECRET:** API Secret de Cloudinary
 - **JWT_SECRET:** Clave secreta para firmar tokens JWT (usa una cadena aleatoria y segura)
 
-### 4️⃣ Iniciar MongoDB
+### 4️⃣ Iniciar MongoDB (solo si utilizas instancia local)
 
-Asegúrate de que MongoDB esté corriendo en tu sistema:
+Si estás usando **MongoDB local**, asegúrate de que el servicio esté corriendo en tu sistema:
 
 ```bash
-# Si usas MongoDB local
 $ mongod
 ```
 
@@ -142,31 +140,31 @@ retro-game-api-backend/
 ├── src/
 │   ├── api/
 │   │   ├── controllers/              # Lógica de negocio
-│   │   │   ├── user.js              # 8 funciones de usuario
-│   │   │   └── videogame.js         # 6 funciones de videojuegos
+│   │   │   ├── user.js               # 8 funciones de usuario
+│   │   │   └── videogame.js          # 6 funciones de videojuegos
 │   │   │
 │   │   ├── models/                   # Esquemas de Mongoose
-│   │   │   ├── user.js              # Modelo User con validaciones
-│   │   │   └── videogame.js         # Modelo Videogame con validaciones
+│   │   │   ├── user.js               # Modelo User con validaciones
+│   │   │   └── videogame.js          # Modelo Videogame con validaciones
 │   │   │
 │   │   └── routes/                   # Definición de endpoints
-│   │       ├── user.js              # Rutas de /api/v1/users
-│   │       └── videogame.js         # Rutas de /api/v1/videogames
+│   │       ├── user.js               # Rutas de /api/v1/users
+│   │       └── videogame.js          # Rutas de /api/v1/videogames
 │   │
 │   ├── config/                       # Configuración de servicios
-│   │   ├── db.js                    # Conexión a MongoDB
-│   │   └── cloudinary.js            # Configuración de Cloudinary
+│   │   ├── db.js                     # Conexión a MongoDB
+│   │   └── cloudinary.js             # Configuración de Cloudinary
 │   │
 │   ├── middlewares/                  # Middlewares personalizados
-│   │   ├── isAuth.js                # Verificación JWT
-│   │   ├── isAdmin.js               # Verificación rol admin
-│   │   ├── isAdminOrOwner.js        # Verificación admin o propietario
-│   │   ├── avatarImg.js             # Upload de avatares (Multer)
-│   │   └── coverImg.js              # Upload de portadas (Multer)
+│   │   ├── isAuth.js                 # Verificación JWT
+│   │   ├── isAdmin.js                # Verificación rol admin
+│   │   ├── isAdminOrOwner.js         # Verificación admin o propietario
+│   │   ├── avatarImg.js              # Upload de avatares (Multer)
+│   │   └── coverImg.js               # Upload de portadas (Multer)
 │   │
 │   └── utils/                        # Utilidades
-│       ├── token.js                 # Generación y verificación JWT
-│       └── deleteFile.js            # Eliminación de archivos en Cloudinary
+│       ├── token.js                  # Generación y verificación JWT
+│       └── deleteFile.js             # Eliminación de archivos en Cloudinary
 ```
 
 ### 📂 Descripción de Carpetas
