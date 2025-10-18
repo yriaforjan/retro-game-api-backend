@@ -7,10 +7,7 @@ const videogameSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: [1970, "El año no puede ser anterior a 1970"],
-      max: [
-        new Date().getFullYear(),
-        "El año no puede ser posterior al actual",
-      ],
+      max: [2005, "El año no puede ser posterior a 2005"],
     },
     genres: [
       {
