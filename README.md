@@ -1,7 +1,6 @@
 # 🚀 RETRO VIDEOGAMES API (BACKEND)
 
-[![Status](https://img.shields.io/badge/Status-En%20Desarrollo-blue.svg)](https://github.com/yriaforjan/retro-game-api-backend)
-[![License](https://img.shields.io/badge/Status-Pendiente%20de%20Revisión-yellow.svg)]()
+[![Status](https://img.shields.io/badge/Status-Completado-brightgreen.svg)](https://github.com/yriaforjan/retro-game-api-backend)
 
 ## 🌟 Descripción del Proyecto
 
