@@ -13,7 +13,8 @@ const register = async (req, res, next) => {
         .status(400)
         .json({ error: "Ya existe un usuario registrado con este email" });
     }
-    const user = new User(req.body);
+    const { name, email, password } = req.body;
+    const user = new User({ name, email, password, role: "user" });
     if (req.file) user.avatar = req.file.path;
     const userDB = await user.save();
     const userResponse = userDB.toObject();
